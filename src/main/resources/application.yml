@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: mysql
+server:
+  port: 8085
+sa-token:
+  token-name: Authorization
+  token-prefix: Bearer
+  jwt-secret-key: '12a5abd0-4084-47df-bf4f-0fd1d085b265'
+knife4j:
+  enable: true
+pms:
+  preview: false
