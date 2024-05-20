@@ -36,3 +36,4 @@ build/
 /musiccovers/
 /song/
 /daniu-os-serve.jar
+/src/main/resources/temp.json
