@@ -1,6 +1,6 @@
 package com.daniu.pms.service;
 
-import com.daniu.pms.domain.Music;
+import com.daniu.pms.domain.entity.Music;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package com.daniu.pms.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.daniu.common.response.Result;
-import com.daniu.pms.domain.Music;
+import com.daniu.pms.domain.entity.Music;
 import com.daniu.pms.service.MusicService;
 import com.daniu.pms.util.FileNameUtils;
 import com.daniu.pms.util.FileUploader;

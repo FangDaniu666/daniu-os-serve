@@ -9,5 +9,24 @@ sa-token:
   jwt-secret-key: '12a5abd0-4084-47df-bf4f-0fd1d085b265'
 knife4j:
   enable: true
+  setting:
+    language: zh_cn
 pms:
   preview: false
+
+mybatis-plus:
+  #实体扫描，多个package用逗号或者分号分隔
+  type-aliases-package: com.daniu.pms.domain.entity
+  configuration:
+    #数据库大写下划线转换
+    #    map-underscore-to-camel-case: on
+    #开启sql日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: is_delete # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除值（默认为 1）
+      logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+    # 启动时logo显示开关
+    banner: off
+# debug: true

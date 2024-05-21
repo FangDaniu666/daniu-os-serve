@@ -1,6 +1,6 @@
 package com.daniu.pms.service.impl;
 
-import com.daniu.pms.domain.MapData;
+import com.daniu.pms.domain.entity.MapData;
 import com.daniu.pms.mapper.MapDataMapper;
 import com.daniu.pms.service.MapDataService;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.daniu.pms.controller;
 
 import com.daniu.common.response.Result;
-import com.daniu.pms.domain.MapData;
+import com.daniu.pms.domain.entity.MapData;
 import com.daniu.pms.service.MapDataService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;

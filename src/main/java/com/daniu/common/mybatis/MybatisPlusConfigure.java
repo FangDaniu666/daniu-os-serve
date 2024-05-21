@@ -3,7 +3,6 @@ package com.daniu.common.mybatis;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,9 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @author FangDaniu
  */
 @Configuration
-@MapperScan("com.daniu.*.mapper")
 public class MybatisPlusConfigure {
-
 
     /**
      * 分页插件

@@ -1,6 +1,6 @@
 package com.daniu.pms.service.impl;
 
-import com.daniu.pms.domain.Music;
+import com.daniu.pms.domain.entity.Music;
 import com.daniu.pms.mapper.MusicMapper;
 import com.daniu.pms.service.MusicService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

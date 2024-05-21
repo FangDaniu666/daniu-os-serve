@@ -2,7 +2,7 @@ package com.daniu.pms.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.daniu.common.response.Result;
-import com.daniu.pms.domain.MapData;
+import com.daniu.pms.domain.entity.MapData;
 import com.daniu.pms.service.MapDataService;
 import com.daniu.pms.util.MarkdownProcessor;
 import com.fasterxml.jackson.databind.JsonNode;

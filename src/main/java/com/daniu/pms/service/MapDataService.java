@@ -2,7 +2,7 @@ package com.daniu.pms.service;
 
 import java.util.List;
 
-import com.daniu.pms.domain.MapData;
+import com.daniu.pms.domain.entity.MapData;
 import com.baomidou.mybatisplus.extension.service.IService;
 public interface MapDataService extends IService<MapData>{
 
