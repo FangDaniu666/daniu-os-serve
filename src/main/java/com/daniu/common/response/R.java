@@ -69,4 +69,18 @@ public class R<T> {
         return r;
     }
 
+    /**
+     * 构建错误响应
+     *
+     * @param message 消息
+     * @return {@link R }<{@link T }>
+     */
+    public static <T> R<T> error(String message) {
+        R<T> r = new R<>();
+        r.setCode(ErrorCode.ERR_500.getCode());
+        r.setData(null);
+        r.setMessage(message);
+        return r;
+    }
+
 }

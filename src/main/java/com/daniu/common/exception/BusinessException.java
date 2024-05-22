@@ -14,6 +14,11 @@ public class BusinessException extends RuntimeException {
 
     private final ErrorCode code;
 
+    public BusinessException(String msg) {
+        super(msg);
+        this.code = ErrorCode.ERR_500;
+    }
+
     public BusinessException(ErrorCode errorCode) {
         super(errorCode.getMsg());
         this.code = errorCode;

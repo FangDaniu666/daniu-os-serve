@@ -2,6 +2,7 @@ package com.daniu.common.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotRoleException;
+import cn.dev33.satoken.util.SaResult;
 import com.daniu.common.response.ErrorCode;
 import com.daniu.common.response.R;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +80,7 @@ public class GlobalExceptionHandler {
         ErrorCode code = ErrorCode.ERR_11003;
         R<String> r = new R<>();
         r.setMessage(code.getMsg())
-            .setCode(code.getCode());
+                .setCode(code.getCode());
         return r;
     }
 
@@ -95,6 +96,18 @@ public class GlobalExceptionHandler {
         ObjectError error = exception.getBindingResult().getAllErrors().get(0);
         String defaultMessage = error.getDefaultMessage();
         return R.build(new BusinessException(ErrorCode.ERR_400, defaultMessage));
+    }
+
+    /**
+     * 捕捉其余所有异常
+     *
+     * @param exception ex
+     * @return {@link SaResult }
+     */
+    @ExceptionHandler
+    public R<String> handlerException(Exception exception) {
+        log.error("Exception", exception);
+        return R.error(exception.getMessage());
     }
 
 }

@@ -1,6 +1,9 @@
 package com.daniu.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.captcha.ICaptcha;
+import cn.hutool.core.convert.NumberWithFormat;
+import cn.hutool.core.lang.Pair;
 import com.daniu.common.auth.SaTokenConfigure;
 import com.daniu.common.preview.Preview;
 import com.daniu.common.response.R;
@@ -10,30 +13,22 @@ import com.daniu.domain.request.LoginRequest;
 import com.daniu.domain.request.RegisterUserRequest;
 import com.daniu.service.CaptchaService;
 import com.daniu.service.UserService;
-import cn.hutool.captcha.ICaptcha;
-import cn.hutool.core.convert.NumberWithFormat;
-import cn.hutool.core.lang.Pair;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 /**
  * 鉴权相关的Controller.
  *
  * @author FangDaniu
+ * @since 2024/05/22
  */
 @RestController
 @RequestMapping("/auth")
@@ -42,9 +37,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "鉴权")
 public class AuthController {
 
-    /**
-     * user service.
-     */
     private final UserService userService;
 
     private final CaptchaService captchaService;
@@ -54,7 +46,8 @@ public class AuthController {
     /**
      * 用户登录接口.
      *
-     * @param request 请求
+     * @param request            登录请求
+     * @param httpServletRequest http servlet请求
      * @return 返回token
      */
     @PostMapping("/login")
@@ -73,7 +66,8 @@ public class AuthController {
     /**
      * 注册
      *
-     * @return R
+     * @param request 请求
+     * @return {@link R }<{@link Void }>
      */
     @PostMapping("/register")
     @Preview
@@ -125,6 +119,10 @@ public class AuthController {
 
     /**
      * 图形验证码
+     *
+     * @param request  http servlet请求
+     * @param response 响应
+     * @throws IOException IOException
      */
     @GetMapping("/captcha")
     @Operation(summary = "验证码")
@@ -136,10 +134,10 @@ public class AuthController {
         captchaPair.getValue().write(response.getOutputStream());
     }
 
-
     /**
      * 修改密码
      *
+     * @param request 请求
      * @return R
      */
     @PostMapping("/password")
