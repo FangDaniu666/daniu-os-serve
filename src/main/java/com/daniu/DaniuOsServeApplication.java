@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.daniu.pms.mapper")
+@MapperScan("com.daniu.mapper")
 public class DaniuOsServeApplication {
 
     public static void main(String[] args) {

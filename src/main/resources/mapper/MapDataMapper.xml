@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daniu.mapper.MapDataMapper">
+  <resultMap id="BaseResultMap" type="com.daniu.domain.entity.MapData">
+    <!--@mbg.generated-->
+    <!--@Table files-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="lastedittime" jdbcType="BIGINT" property="lastedittime" />
+    <result column="introduction" jdbcType="LONGVARCHAR" property="introduction" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `path`, `size`, `name`, lastedittime, introduction, title
+  </sql>
+
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update files
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="`path` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.path,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="`size` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.size,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`name` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.name,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="lastedittime = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.lastedittime,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="introduction = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.introduction,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="title = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.title,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into files
+    (`path`, `size`, `name`, lastedittime, introduction, title)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.path,jdbcType=VARCHAR}, #{item.size,jdbcType=INTEGER}, #{item.name,jdbcType=VARCHAR}, 
+        #{item.lastedittime,jdbcType=BIGINT}, #{item.introduction,jdbcType=LONGVARCHAR}, 
+        #{item.title,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+</mapper>

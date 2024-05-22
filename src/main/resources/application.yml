@@ -1,22 +1,23 @@
 spring:
   profiles:
-    active: mysql
+    active: mysql,dev
+
 server:
   port: 8085
+  servlet:
+    context-path: /api
+
 sa-token:
   token-name: Authorization
   token-prefix: Bearer
   jwt-secret-key: '12a5abd0-4084-47df-bf4f-0fd1d085b265'
-knife4j:
-  enable: true
-  setting:
-    language: zh_cn
+
 pms:
   preview: false
 
 mybatis-plus:
   #实体扫描，多个package用逗号或者分号分隔
-  type-aliases-package: com.daniu.pms.domain.entity
+  type-aliases-package: com.daniu.domain.entity
   configuration:
     #数据库大写下划线转换
     #    map-underscore-to-camel-case: on
