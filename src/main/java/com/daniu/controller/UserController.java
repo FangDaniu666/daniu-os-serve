@@ -4,9 +4,9 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.daniu.common.auth.RoleType;
 import com.daniu.common.auth.Roles;
 import com.daniu.common.auth.SaTokenConfigure;
-import com.daniu.common.exception.BizException;
+import com.daniu.common.exception.BusinessException;
 import com.daniu.common.preview.Preview;
-import com.daniu.common.response.BizResponseCode;
+import com.daniu.common.response.ErrorCode;
 import com.daniu.common.response.Page;
 import com.daniu.common.response.R;
 import com.daniu.domain.dto.UserDetailDto;
@@ -85,7 +85,7 @@ public class UserController {
     public R<Void> remove(@PathVariable Long id) {
         NumberWithFormat userIdFormat = (NumberWithFormat) StpUtil.getExtra(SaTokenConfigure.JWT_USER_ID_KEY);
         if (userIdFormat.longValue() == id) {
-            throw new BizException(BizResponseCode.ERR_11006, "非法操作，不能删除自己！");
+            throw new BusinessException(ErrorCode.ERR_11006, "非法操作，不能删除自己！");
         }
         userService.removeUser(id);
         return R.ok();
@@ -118,7 +118,7 @@ public class UserController {
     public R<Void> updateProfile(@PathVariable Long id, @RequestBody UpdateProfileRequest request) {
         NumberWithFormat userIdFormat = (NumberWithFormat) StpUtil.getExtra(SaTokenConfigure.JWT_USER_ID_KEY);
         if (userIdFormat.longValue() != id) {
-            throw new BizException(BizResponseCode.ERR_11004, "越权操作，用户资料只能本人修改！");
+            throw new BusinessException(ErrorCode.ERR_11004, "越权操作，用户资料只能本人修改！");
         }
         userService.updateProfile(id, request);
         return R.ok();
@@ -152,7 +152,7 @@ public class UserController {
     @Roles({RoleType.SUPER_ADMIN})
     @Operation(summary = "根据用户名获取")
     public R<Void> findByUsername(@PathVariable String username) {
-        throw new BizException(BizResponseCode.ERR_11006, "接口未实现");
+        throw new BusinessException(ErrorCode.ERR_11006, "接口未实现");
     }
 
 
@@ -164,7 +164,7 @@ public class UserController {
     @GetMapping("/profile/{userId}")
     @Operation(summary = "查询用户的profile")
     public R<Void> getUserProfile(@PathVariable Long userId) {
-        throw new BizException(BizResponseCode.ERR_11006, "接口未实现");
+        throw new BusinessException(ErrorCode.ERR_11006, "接口未实现");
     }
 
     /**

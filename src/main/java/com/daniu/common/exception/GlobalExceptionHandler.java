@@ -2,7 +2,7 @@ package com.daniu.common.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotRoleException;
-import com.daniu.common.response.BizResponseCode;
+import com.daniu.common.response.ErrorCode;
 import com.daniu.common.response.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * 异常处理
+ * 全局异常处理
  *
  * @author FangDaniu
+ * @since 2024/05/22
  */
 @RestControllerAdvice
 @Slf4j
-public class ExceptionHandlerConfigure {
+public class GlobalExceptionHandler {
 
     /**
      * 处理在没有登录请求的异常
@@ -40,12 +41,12 @@ public class ExceptionHandlerConfigure {
     /**
      * 处理业务异常
      *
-     * @param exception BizException
+     * @param exception BusinessException
      * @return 返回200的http状态码，body描述异常信息
      */
     @ResponseBody
     @ExceptionHandler
-    public R<Object> handle(BizException exception) {
+    public R<Object> handle(BusinessException exception) {
         return R.build(exception);
     }
 
@@ -53,7 +54,7 @@ public class ExceptionHandlerConfigure {
      * 处理参数错误的异常
      *
      * @param exception BadRequestException
-     * @return 返回400状态码
+     * @return 返回 400 状态码
      */
     @ResponseBody
     @ExceptionHandler
@@ -69,13 +70,13 @@ public class ExceptionHandlerConfigure {
      * 处理角色无权操作异常
      *
      * @param exception ex
-     * @return r
+     * @return {@link R }<{@link String }>
      */
     @ResponseBody
     @ExceptionHandler
     public R<String> handle(NotRoleException exception) {
         log.debug("当前用户角色无权操作", exception);
-        BizResponseCode code = BizResponseCode.ERR_11003;
+        ErrorCode code = ErrorCode.ERR_11003;
         R<String> r = new R<>();
         r.setMessage(code.getMsg())
             .setCode(code.getCode());
@@ -86,14 +87,14 @@ public class ExceptionHandlerConfigure {
      * 处理参数错误异常
      *
      * @param exception ex
-     * @return r
+     * @return {@link R }<{@link String }>
      */
     @ResponseBody
     @ExceptionHandler
     public R<String> handle(MethodArgumentNotValidException exception) {
         ObjectError error = exception.getBindingResult().getAllErrors().get(0);
         String defaultMessage = error.getDefaultMessage();
-        return R.build(new BizException(BizResponseCode.ERR_400, defaultMessage));
+        return R.build(new BusinessException(ErrorCode.ERR_400, defaultMessage));
     }
 
 }

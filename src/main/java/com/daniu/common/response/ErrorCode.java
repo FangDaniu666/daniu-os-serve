@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum BizResponseCode {
+public enum ErrorCode {
 
     /**
      * 正常响应码

@@ -11,6 +11,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * SaToken的配置类
+ *
+ * @author FangDaniu
+ * @since  2024/05/22
  */
 @Configuration
 public class SaTokenConfigure implements WebMvcConfigurer {
@@ -23,11 +26,21 @@ public class SaTokenConfigure implements WebMvcConfigurer {
 
     public static final String JWT_CURRENT_ROLE_KEY = "currentRoleCode";
 
+    /**
+     * Sa-Token 整合 jwt (Stateless 无状态模式)
+     *
+     * @return {@link StpLogic }
+     */
     @Bean
     public StpLogic getStpLogicJwt() {
         return new StpLogicJwtForStateless();
     }
 
+    /**
+     * 添加拦截器
+     *
+     * @param registry 拦截器注册
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))

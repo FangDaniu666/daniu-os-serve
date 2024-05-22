@@ -1,6 +1,6 @@
 package com.daniu.common.response;
 
-import com.daniu.common.exception.BizException;
+import com.daniu.common.exception.BusinessException;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -48,8 +48,8 @@ public class R<T> {
     public static <T> R<T> ok(T data) {
         R<T> r = new R<>();
         r.setData(data);
-        r.setCode(BizResponseCode.OK.getCode());
-        r.setMessage(BizResponseCode.OK.getMsg());
+        r.setCode(ErrorCode.OK.getCode());
+        r.setMessage(ErrorCode.OK.getMsg());
         return r;
     }
 
@@ -60,7 +60,7 @@ public class R<T> {
      * @param <T>       类型
      * @return 响应体
      */
-    public static <T> R<T> build(BizException exception) {
+    public static <T> R<T> build(BusinessException exception) {
         R<T> r = new R<>();
         r.setCode(exception.getCode().getCode());
         r.setData(null);

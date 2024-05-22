@@ -1,6 +1,12 @@
 package com.daniu.service.impl;
 
-import com.daniu.common.auth.PmsConstant;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daniu.common.auth.RoleType;
 import com.daniu.common.exception.BadRequestException;
 import com.daniu.common.response.Page;
@@ -10,30 +16,18 @@ import com.daniu.domain.entity.Permission;
 import com.daniu.domain.entity.Role;
 import com.daniu.domain.entity.RolePermission;
 import com.daniu.domain.entity.UserRole;
+import com.daniu.domain.request.*;
 import com.daniu.mapper.RoleMapper;
-import com.daniu.domain.request.AddRolePermissionsRequest;
-import com.daniu.domain.request.AddRoleUsersRequest;
-import com.daniu.domain.request.CreateRoleRequest;
-import com.daniu.domain.request.RemoveRoleUsersRequest;
-import com.daniu.domain.request.RolePageRequest;
-import com.daniu.domain.request.UpdateRoleRequest;
 import com.daniu.service.PermissionService;
 import com.daniu.service.RolePermissionService;
 import com.daniu.service.RoleService;
 import com.daniu.service.UserRoleService;
 import com.daniu.util.PermissionUtil;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * RoleServiceImpl
@@ -62,8 +56,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new BadRequestException("当前角色不存在或者已删除");
         }
         List<Permission> permissions =
-            PmsConstant.ROLE_ADMIN.equals(roleCode) ? permissionService.list()
-                : permissionService.findByRoleId(role.getId());
+                RoleType.SUPER_ADMIN.equals(roleCode) ? permissionService.list()
+                        : permissionService.findByRoleId(role.getId());
 
         return PermissionUtil.toTreeNode(permissions, null);
     }
@@ -77,9 +71,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Transactional(rollbackFor = Exception.class)
     public void createRole(CreateRoleRequest request) {
         boolean exists = lambdaQuery().eq(Role::getCode, request.getCode())
-            .or()
-            .eq(Role::getName, request.getName())
-            .exists();
+                .or()
+                .eq(Role::getName, request.getName())
+                .exists();
 
         if (exists) {
             throw new BadRequestException("角色已存在（角色名和角色编码不能重复）");
@@ -88,12 +82,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Role role = request.convert(Role.class);
         save(role);
         List<RolePermission> permissionList = request.getPermissionIds().stream()
-            .map(permId -> {
-                RolePermission rolePermission = new RolePermission();
-                rolePermission.setRoleId(role.getId());
-                rolePermission.setPermissionId(permId);
-                return rolePermission;
-            }).toList();
+                .map(permId -> {
+                    RolePermission rolePermission = new RolePermission();
+                    rolePermission.setRoleId(role.getId());
+                    rolePermission.setPermissionId(permId);
+                    return rolePermission;
+                }).toList();
         this.rolePermissionService.saveBatch(permissionList);
     }
 
@@ -102,18 +96,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         IPage<Role> qp = request.toPage();
         LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(StrUtil.isNotBlank(request.getName()), Role::getName, request.getName())
-            .or()
-            .eq(ObjectUtil.isNotNull(request.getEnable()), Role::getEnable, request.getEnable());
+                .or()
+                .eq(ObjectUtil.isNotNull(request.getEnable()), Role::getEnable, request.getEnable());
         IPage<RolePageDto> pageRet = this.page(qp, queryWrapper)
-            .convert(role -> {
-                RolePageDto dto = role.convert(RolePageDto.class);
-                List<Long> permissionList = rolePermissionService.lambdaQuery().select(RolePermission::getPermissionId)
-                    .eq(RolePermission::getRoleId, role.getId())
-                    .list().stream().map(RolePermission::getPermissionId)
-                    .toList();
-                dto.setPermissionIds(permissionList);
-                return dto;
-            });
+                .convert(role -> {
+                    RolePageDto dto = role.convert(RolePageDto.class);
+                    List<Long> permissionList = rolePermissionService.lambdaQuery().select(RolePermission::getPermissionId)
+                            .eq(RolePermission::getRoleId, role.getId())
+                            .list().stream().map(RolePermission::getPermissionId)
+                            .toList();
+                    dto.setPermissionIds(permissionList);
+                    return dto;
+                });
 
         return Page.convert(pageRet);
     }
@@ -121,9 +115,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<PermissionDto> findRolePermissions(Long id) {
         return permissionService.findByRoleId(id)
-            .stream()
-            .map(permission -> permission.convert(PermissionDto.class))
-            .toList();
+                .stream()
+                .map(permission -> permission.convert(PermissionDto.class))
+                .toList();
     }
 
     @Override
@@ -147,12 +141,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             rolePermissionService.lambdaUpdate().eq(RolePermission::getRoleId, id).remove();
             if (!request.getPermissionIds().isEmpty()) {
                 List<RolePermission> permissionList = request.getPermissionIds().stream()
-                    .map(permId -> {
-                        RolePermission rolePermission = new RolePermission();
-                        rolePermission.setRoleId(id);
-                        rolePermission.setPermissionId(permId);
-                        return rolePermission;
-                    }).toList();
+                        .map(permId -> {
+                            RolePermission rolePermission = new RolePermission();
+                            rolePermission.setRoleId(id);
+                            rolePermission.setPermissionId(permId);
+                            return rolePermission;
+                        }).toList();
                 rolePermissionService.saveBatch(permissionList);
             }
         }
@@ -184,21 +178,21 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new BadRequestException("无需给超级管理员授权");
         }
         List<Long> list = rolePermissionService.lambdaQuery()
-            .select(RolePermission::getPermissionId)
-            .eq(RolePermission::getRoleId, role.getId())
-            .list()
-            .stream()
-            .map(RolePermission::getPermissionId).toList();
+                .select(RolePermission::getPermissionId)
+                .eq(RolePermission::getRoleId, role.getId())
+                .list()
+                .stream()
+                .map(RolePermission::getPermissionId).toList();
 
         CollUtil.removeWithAddIf(request.getPermissionIds(), list::contains);
         List<RolePermission> permissionList = request.getPermissionIds()
-            .stream()
-            .map(permId -> {
-                RolePermission rolePermission = new RolePermission();
-                rolePermission.setRoleId(role.getId());
-                rolePermission.setPermissionId(permId);
-                return rolePermission;
-            }).toList();
+                .stream()
+                .map(permId -> {
+                    RolePermission rolePermission = new RolePermission();
+                    rolePermission.setRoleId(role.getId());
+                    rolePermission.setPermissionId(permId);
+                    return rolePermission;
+                }).toList();
         rolePermissionService.saveBatch(permissionList);
 
     }
@@ -211,21 +205,21 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new BadRequestException("角色不存在或者已删除");
         }
         List<Long> list = userRoleService.lambdaQuery()
-            .select(UserRole::getUserId)
-            .eq(UserRole::getRoleId, roleId)
-            .list()
-            .stream()
-            .map(UserRole::getUserId).toList();
+                .select(UserRole::getUserId)
+                .eq(UserRole::getRoleId, roleId)
+                .list()
+                .stream()
+                .map(UserRole::getUserId).toList();
 
         CollUtil.removeWithAddIf(request.getUserIds(), list::contains);
         List<UserRole> permissionList = request.getUserIds()
-            .stream()
-            .map(userId -> {
-                UserRole userRole = new UserRole();
-                userRole.setRoleId(roleId);
-                userRole.setUserId(userId);
-                return userRole;
-            }).toList();
+                .stream()
+                .map(userId -> {
+                    UserRole userRole = new UserRole();
+                    userRole.setRoleId(roleId);
+                    userRole.setUserId(userId);
+                    return userRole;
+                }).toList();
         userRoleService.saveBatch(permissionList);
     }
 
@@ -237,9 +231,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new BadRequestException("角色不存在或者已删除");
         }
         userRoleService.lambdaUpdate()
-            .eq(UserRole::getRoleId, roleId)
-            .in(UserRole::getUserId, request.getUserIds())
-            .remove();
+                .eq(UserRole::getRoleId, roleId)
+                .in(UserRole::getUserId, request.getUserIds())
+                .remove();
     }
 
 }

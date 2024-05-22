@@ -8,6 +8,9 @@ import java.lang.annotation.Target;
 
 /**
  * 标识角色权限
+ *
+ * @author FangDaniu
+ * @since 2024/05/22
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

@@ -1,7 +1,7 @@
 package com.daniu.common.preview;
 
-import com.daniu.common.exception.BizException;
-import com.daniu.common.response.BizResponseCode;
+import com.daniu.common.exception.BusinessException;
+import com.daniu.common.response.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -35,7 +35,7 @@ public class PreviewAspect implements InitializingBean {
 
     @Before("pointcut()")
     public void before() {
-        throw new BizException(BizResponseCode.ERR_30001);
+        throw new BusinessException(ErrorCode.ERR_30001);
     }
 
 

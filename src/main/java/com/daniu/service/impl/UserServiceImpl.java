@@ -11,9 +11,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daniu.common.auth.SaTokenConfigure;
-import com.daniu.common.exception.BizException;
+import com.daniu.common.exception.BusinessException;
 import com.daniu.common.preview.PreviewProperties;
-import com.daniu.common.response.BizResponseCode;
+import com.daniu.common.response.ErrorCode;
 import com.daniu.common.response.Page;
 import com.daniu.domain.dto.*;
 import com.daniu.domain.entity.Profile;
@@ -53,7 +53,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public LoginTokenDto login(LoginRequest request) {
         User user = lambdaQuery().eq(User::getUsername, request.getUsername()).one();
         if (user == null) {
-            throw new BizException(BizResponseCode.ERR_10002);
+            throw new BusinessException(ErrorCode.ERR_10002);
         }
         // 预览环境下可快速登录，不用验证码
         if (Boolean.TRUE.equals(request.getIsQuick()) && Boolean.TRUE.equals(previewProperties.getPreview())) {
@@ -61,7 +61,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         if (StrUtil.isBlank(request.getCaptchaKey())
                 || !captchaService.verify(request.getCaptchaKey(), request.getCaptcha())) {
-            throw new BizException(BizResponseCode.ERR_10003);
+            throw new BusinessException(ErrorCode.ERR_10003);
         }
         return login(request, user);
     }
@@ -74,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
             return generateToken(user, roles, roles.isEmpty() ? "" : roles.get(0).getCode());
         } else {
-            throw new BizException(BizResponseCode.ERR_10002);
+            throw new BusinessException(ErrorCode.ERR_10002);
         }
     }
 
@@ -89,7 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .map(role -> role.convert(RoleDto.class))
                 .toList();
         if (roleDtoList.isEmpty()) {
-            throw new BizException(BizResponseCode.ERR_11005);
+            throw new BusinessException(ErrorCode.ERR_11005);
         }
         userDetailDto.setProfile(profileDto);
         userDetailDto.setRoles(roleDtoList);
@@ -113,7 +113,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
         }
         if (currentRole == null) {
-            throw new BizException(BizResponseCode.ERR_11005);
+            throw new BusinessException(ErrorCode.ERR_11005);
         }
         return generateToken(user, roles, currentRole.getCode());
     }
@@ -123,7 +123,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void register(RegisterUserRequest request) {
         boolean exists = lambdaQuery().eq(User::getUsername, request.getUsername()).exists();
         if (exists) {
-            throw new BizException(BizResponseCode.ERR_10001);
+            throw new BusinessException(ErrorCode.ERR_10001);
         }
         User user = request.convert(User.class);
         user.setPassword(BCrypt.hashpw(user.getPassword()));
@@ -169,7 +169,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String username = (String) StpUtil.getExtra(SaTokenConfigure.JWT_USERNAME_KEY);
         User user = lambdaQuery().select(User::getPassword).eq(User::getUsername, username).one();
         if (!BCrypt.checkpw(request.getOldPassword(), user.getPassword())) {
-            throw new BizException(BizResponseCode.ERR_10004);
+            throw new BusinessException(ErrorCode.ERR_10004);
         }
         user.setPassword(BCrypt.hashpw(request.getNewPassword()));
         lambdaUpdate().set(User::getPassword, BCrypt.hashpw(request.getNewPassword()))
@@ -203,7 +203,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional(rollbackFor = Exception.class)
     public void removeUser(Long id) {
         if (id == 1) {
-            throw new BizException(BizResponseCode.ERR_11006, "不能删除根用户");
+            throw new BusinessException(ErrorCode.ERR_11006, "不能删除根用户");
         }
         removeById(id);
         profileService.lambdaUpdate().eq(Profile::getUserId, id).remove();

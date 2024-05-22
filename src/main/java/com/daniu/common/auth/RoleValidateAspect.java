@@ -13,12 +13,16 @@ import org.springframework.stereotype.Component;
  * 角色检查切面
  *
  * @author FangDaniu
+ * @since  2024/05/22
  */
 @Aspect
 @Component
 public class RoleValidateAspect {
 
 
+    /**
+     * 切点
+     */
     @Pointcut("@annotation(Roles)")
     public void pointcut() {
 
@@ -28,7 +32,7 @@ public class RoleValidateAspect {
     /**
      * 在执行方法前处理
      *
-     * @param joinPoint jp
+     * @param joinPoint 切点
      */
     @Before("pointcut()")
     public void before(JoinPoint joinPoint) {
@@ -38,4 +42,5 @@ public class RoleValidateAspect {
             StpUtil.checkRoleOr(roles.value());
         }
     }
+
 }
