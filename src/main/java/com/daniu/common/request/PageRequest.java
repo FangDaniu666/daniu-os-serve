@@ -6,6 +6,9 @@ import lombok.Data;
 
 /**
  * 分页请求
+ *
+ * @author FangDaniu
+ * @since 2024/05/22
  */
 @Data
 public class PageRequest {
@@ -16,7 +19,7 @@ public class PageRequest {
     private Integer pageNo = 1;
 
     /**
-     * 页大小
+     * 每页大小
      */
     private Integer pageSize = 10;
 

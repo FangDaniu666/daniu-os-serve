@@ -12,7 +12,7 @@ sa-token:
   token-prefix: Bearer
   jwt-secret-key: '12a5abd0-4084-47df-bf4f-0fd1d085b265'
 
-pms:
+dnos:
   preview: false
 
 mybatis-plus:

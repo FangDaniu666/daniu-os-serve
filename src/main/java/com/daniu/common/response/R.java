@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
  * 统一响应body
  *
  * @author FangDaniu
+ * @since 2024/05/22
  */
 @Data
 @Accessors(chain = true)
@@ -39,7 +40,7 @@ public class R<T> {
     }
 
     /**
-     * 成功的响应码，附带数据
+     * 成功地响应码，附带数据
      *
      * @param data 数据
      * @param <T>  数据类型

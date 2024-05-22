@@ -1,4 +1,4 @@
-package com.daniu.common.mybatis;
+package com.daniu.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -10,14 +10,15 @@ import org.springframework.context.annotation.Configuration;
  * mybatis plus配置
  *
  * @author FangDaniu
+ * @since  2024/05/22
  */
 @Configuration
-public class MybatisPlusConfigure {
+public class MybatisPlusConfig {
 
     /**
-     * 分页插件
+     * MyBatis Plus分页拦截器
      *
-     * @return bean
+     * @return {@link MybatisPlusInterceptor }
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
@@ -25,6 +26,5 @@ public class MybatisPlusConfigure {
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
     }
-
 
 }

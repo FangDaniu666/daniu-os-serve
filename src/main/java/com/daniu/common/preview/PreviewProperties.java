@@ -8,9 +8,10 @@ import org.springframework.context.annotation.Configuration;
  * 预览环境属性
  *
  * @author FangDaniu
+ * @since  2024/05/22
  */
 @Data
-@ConfigurationProperties(prefix = "pms")
+@ConfigurationProperties(prefix = "dnos")
 @Configuration
 public class PreviewProperties {
 

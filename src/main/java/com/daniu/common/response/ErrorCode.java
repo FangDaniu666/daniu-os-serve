@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
  * 业务响应码
  *
  * @author FangDaniu
+ * @since 2024/05/22
  */
 @Getter
 @RequiredArgsConstructor

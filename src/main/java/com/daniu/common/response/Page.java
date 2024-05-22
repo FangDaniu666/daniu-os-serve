@@ -7,6 +7,9 @@ import java.util.List;
 
 /**
  * 包装分页数据
+ *
+ * @author FangDaniu
+ * @since 2024/05/22
  */
 @Data
 public class Page<T> {

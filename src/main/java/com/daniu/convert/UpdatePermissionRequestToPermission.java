@@ -1,6 +1,6 @@
 package com.daniu.convert;
 
-import static com.daniu.common.mapstruct.MapstructConstant.DEFAULT_COMPONENT_MODEL;
+import static com.daniu.common.constant.MapstructConstant.DEFAULT_COMPONENT_MODEL;
 
 import com.daniu.domain.entity.Permission;
 import com.daniu.domain.request.UpdatePermissionRequest;

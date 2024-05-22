@@ -1,9 +1,10 @@
-package com.daniu.common.mapstruct;
+package com.daniu.common.constant;
 
 /**
  * mapstruct常量
  *
  * @author FangDaniu
+ * @since  2024/05/22
  */
 public class MapstructConstant {
 

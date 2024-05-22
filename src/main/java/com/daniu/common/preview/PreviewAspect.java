@@ -11,13 +11,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
- * {@link Preview}切面处理
+ * {@link Preview}
+ * 切面处理
  *
  * @author FangDaniu
+ * @since  2024/05/22
  */
 @Aspect
 @Component
-@ConditionalOnProperty(value = "pms.preview", havingValue = "true")
+@ConditionalOnProperty(value = "dnos.preview", havingValue = "true")
 @Slf4j
 public class PreviewAspect implements InitializingBean {
 

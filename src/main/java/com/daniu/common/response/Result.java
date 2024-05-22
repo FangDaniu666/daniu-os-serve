@@ -2,6 +2,12 @@ package com.daniu.common.response;
 
 import lombok.Data;
 
+/**
+ * 统一响应
+ *
+ * @author FangDaniu
+ * @since  2024/05/22
+ */
 @Data
 public class Result {
 
@@ -15,6 +21,12 @@ public class Result {
 
     private Object data;
 
+    /**
+     * 成功
+     *
+     * @param message 消息
+     * @return {@link Result }
+     */
     public static Result success(String message) {
         Result result = new Result();
         result.setCode(200);
@@ -25,18 +37,37 @@ public class Result {
         return result;
     }
 
+    /**
+     * 成功
+     *
+     * @param message 消息
+     * @param data    数据
+     * @return {@link Result }
+     */
     public static Result success(String message, Object data) {
         Result result = success(message);
         result.setData(data);
         return result;
     }
 
+    /**
+     * 警告
+     *
+     * @param message 消息
+     * @return {@link Result }
+     */
     public static Result warning(String message) {
         Result result = error(message);
         result.setType("warning");
         return result;
     }
 
+    /**
+     * 错误
+     *
+     * @param message 消息
+     * @return {@link Result }
+     */
     public static Result error(String message) {
         Result result = success(message);
         result.setSuccess(false);
@@ -44,9 +75,4 @@ public class Result {
         return result;
     }
 
-    public static Result fatal(String message) {
-        Result result = error(message);
-        result.setCode(500);
-        return result;
-    }
 }

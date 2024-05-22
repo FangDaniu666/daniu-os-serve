@@ -1,11 +1,11 @@
 package com.daniu.convert;
 
-import static com.daniu.common.mapstruct.MapstructConstant.DEFAULT_COMPONENT_MODEL;
-
+import cn.dhbin.mapstruct.helper.core.BeanConvertMapper;
 import com.daniu.domain.entity.Permission;
 import com.daniu.domain.request.CreatePermissionRequest;
-import cn.dhbin.mapstruct.helper.core.BeanConvertMapper;
 import org.mapstruct.Mapper;
+
+import static com.daniu.common.constant.MapstructConstant.DEFAULT_COMPONENT_MODEL;
 
 /**
  * CreatePermissionRequestToPermission

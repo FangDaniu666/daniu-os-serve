@@ -12,10 +12,8 @@ public class BeansConfig {
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
         // 文件最大500M,DataUnit提供5中类型B,KB,MB,GB,TB
-//        factory.setMaxFileSize(DataSize.of(500, DataUnit.MEGABYTES));
         factory.setMaxFileSize(DataSize.ofMegabytes(500));
         // 设置总上传数据总大小30G
-//        factory.setMaxRequestSize(DataSize.of(30, DataUnit.GIGABYTES));
         factory.setMaxRequestSize(DataSize.ofGigabytes(30));
         return factory.createMultipartConfig();
     }
