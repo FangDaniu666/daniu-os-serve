@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daniu.common.constant.Constants;
 import com.daniu.common.exception.BusinessException;
+import com.daniu.domain.dto.MusicDto;
 import com.daniu.domain.entity.Music;
 import com.daniu.mapper.MusicMapper;
 import com.daniu.service.MusicService;
@@ -33,7 +34,7 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Music insertOne(MultipartFile file) throws IOException {
+    public MusicDto insertOne(MultipartFile file) throws IOException {
 
         // 获取上传文件的原始名称
         String fileName = file.getOriginalFilename();
@@ -70,7 +71,9 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
             int updateResult = baseMapper.updateById(music);
             if (updateResult == 0) throw new BusinessException("文件更新失败");
         }
-        return music;
+        MusicDto musicDto = music.convert(MusicDto.class);
+        musicDto.setInsert(isInsert);
+        return musicDto;
     }
 
 }

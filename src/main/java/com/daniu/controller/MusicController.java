@@ -2,6 +2,7 @@ package com.daniu.controller;
 
 import com.daniu.common.exception.BusinessException;
 import com.daniu.common.response.Result;
+import com.daniu.domain.dto.MusicDto;
 import com.daniu.domain.entity.Music;
 import com.daniu.service.MusicService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,8 +53,12 @@ public class MusicController {
     public Result insertOne(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) throw new BusinessException("请上传文件");
 
-        Music music = musicService.insertOne(file);
-        return Result.success("文件上传成功", music);
+        MusicDto music = musicService.insertOne(file);
+        if (music.isInsert()) {
+            return Result.success("文件上传成功", music);
+        } else {
+            return Result.success("文件更新成功", music);
+        }
     }
 
     @DeleteMapping("/deleteOne")

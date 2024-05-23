@@ -1,5 +1,6 @@
 package com.daniu.domain.entity;
 
+import cn.dhbin.mapstruct.helper.core.Convert;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -10,14 +11,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
-    * 存储音乐数据的表
-    */
+ * 存储音乐数据的表
+ */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "music")
-public class Music {
+public class Music implements Convert {
     /**
      * 唯一标识符
      */

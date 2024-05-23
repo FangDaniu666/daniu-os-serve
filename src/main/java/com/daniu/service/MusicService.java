@@ -1,6 +1,7 @@
 package com.daniu.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.daniu.domain.dto.MusicDto;
 import com.daniu.domain.entity.Music;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,5 +15,5 @@ public interface MusicService extends IService<Music>{
 
     int batchInsert(List<Music> list);
 
-    Music insertOne(MultipartFile file) throws IOException;
+    MusicDto insertOne(MultipartFile file) throws IOException;
 }
