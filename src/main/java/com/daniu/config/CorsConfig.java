@@ -30,7 +30,6 @@ public class CorsConfig {
                             .allowedOrigins("*") // 允许所有来源
                             .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH") // 允许的方法
                             .allowedHeaders("*") // 允许的请求头
-                            .allowCredentials(true) // 是否允许发送Cookie
                             .maxAge(3600); // 预检请求的有效期，单位秒
             }
         };
