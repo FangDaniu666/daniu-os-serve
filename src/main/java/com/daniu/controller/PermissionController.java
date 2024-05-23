@@ -20,6 +20,7 @@ import java.util.List;
  * 权限Controller
  *
  * @author FangDaniu
+ * @since 2024/05/23
  */
 @RestController
 @RequestMapping("/permission")
@@ -27,13 +28,13 @@ import java.util.List;
 @Tag(name = "权限")
 public class PermissionController {
 
-
     private final PermissionService permissionService;
 
     /**
      * 新建权限
      *
-     * @return R
+     * @param request 请求
+     * @return {@link R }<{@link Void }>
      */
     @PostMapping
     @Preview
@@ -47,7 +48,8 @@ public class PermissionController {
     /**
      * 批量创建权限
      *
-     * @return R
+     * @param request 请求
+     * @return {@link R }<{@link Void }>
      */
     @PostMapping("/batch")
     @Preview
@@ -60,7 +62,7 @@ public class PermissionController {
     /**
      * 获取所有权限
      *
-     * @return R
+     * @return {@link R }<{@link List }<{@link PermissionDto }>>
      */
     @GetMapping
     @Operation(summary = "获取所有权限")
@@ -72,7 +74,7 @@ public class PermissionController {
     /**
      * 获取所有权限树
      *
-     * @return R
+     * @return {@link R }<{@link List }<{@link Tree }<{@link Long }>>>
      */
     @GetMapping("/tree")
     @Operation(summary = "获取所有权限树")
@@ -84,7 +86,7 @@ public class PermissionController {
     /**
      * 获取菜单树
      *
-     * @return R
+     * @return {@link R }<{@link List }<{@link Tree }<{@link Long }>>>
      */
     @GetMapping("menu/tree")
     @Operation(summary = "获取菜单树")
@@ -96,7 +98,8 @@ public class PermissionController {
     /**
      * 根据id获取
      *
-     * @return R
+     * @param id id
+     * @return {@link R }<{@link PermissionDto }>
      */
     @GetMapping("{id}")
     @Operation(summary = "根据id获取")
@@ -113,7 +116,9 @@ public class PermissionController {
     /**
      * 根据id更新
      *
-     * @return R
+     * @param id      id
+     * @param request 请求
+     * @return {@link R }<{@link Object }>
      */
     @PatchMapping("{id}")
     @Operation(summary = "根据id更新")
@@ -127,7 +132,8 @@ public class PermissionController {
     /**
      * 根据id删除
      *
-     * @return R
+     * @param id id
+     * @return {@link R }<{@link Object }>
      */
     @DeleteMapping("{id}")
     @Operation(summary = "根据id删除")
@@ -136,11 +142,11 @@ public class PermissionController {
         return R.ok();
     }
 
-
     /**
      * 获取
      *
-     * @return R
+     * @param parentId 父id
+     * @return {@link R }<{@link List }<{@link Permission }>>
      */
     @GetMapping("/button-and-api/{parentId}")
     @Operation(summary = "根据父id获取权限列表")
@@ -152,7 +158,8 @@ public class PermissionController {
     /**
      * 校验 path 存不存在menu资源内
      *
-     * @return R
+     * @param path 路径
+     * @return {@link R }<{@link Object }>
      */
     @GetMapping("/menu/validate")
     @Operation(summary = "校验path存不存在menu资源内")

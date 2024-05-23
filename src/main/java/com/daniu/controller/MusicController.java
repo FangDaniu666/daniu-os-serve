@@ -6,7 +6,6 @@ import com.daniu.domain.dto.MusicDto;
 import com.daniu.domain.entity.Music;
 import com.daniu.service.MusicService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +31,7 @@ import static com.daniu.common.constant.Constants.ASSETS_PATH;
 @Tag(name = "音乐文件管理")
 public class MusicController {
 
-    @Resource
-    private MusicService musicService;
+    private final MusicService musicService;
 
     @GetMapping("selectOne")
     public Result selectOne(Integer id) {

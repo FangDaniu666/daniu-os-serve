@@ -4,7 +4,6 @@ import com.daniu.common.response.Result;
 import com.daniu.domain.entity.MapData;
 import com.daniu.service.MapDataService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +24,7 @@ import java.util.Optional;
 @Tag(name = "map信息")
 public class MapDataController {
 
-    @Resource
-    private MapDataService mapDataService;
+    private final MapDataService mapDataService;
 
     /**
      * 通过id查询单条map数据

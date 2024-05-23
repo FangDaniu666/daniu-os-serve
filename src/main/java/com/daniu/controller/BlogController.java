@@ -7,11 +7,11 @@ import com.daniu.service.MapDataService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,8 +29,7 @@ import java.nio.file.Paths;
 @Tag(name = "桌面文件管理")
 public class BlogController {
 
-    @Resource
-    private MapDataService mapDataService;
+    private final MapDataService mapDataService;
 
     /**
      * 查询单个文件

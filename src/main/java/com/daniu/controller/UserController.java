@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 用户Controller
  *
  * @author FangDaniu
+ * @since 2024/05/23
  */
 @RestController
 @RequestMapping("/user")
@@ -48,7 +49,8 @@ public class UserController {
     /**
      * 新建用户
      *
-     * @return R
+     * @param request 注册请求
+     * @return {@link R }<{@link Void }>
      */
     @PostMapping
     @Roles({RoleType.SUPER_ADMIN})
@@ -63,7 +65,8 @@ public class UserController {
     /**
      * 获取所有
      *
-     * @return R
+     * @param request 用户页请求
+     * @return {@link R }<{@link Page }<{@link UserPageDto }>>
      */
     @GetMapping
     @Operation(summary = "获取所有")
@@ -76,7 +79,8 @@ public class UserController {
     /**
      * 根据id删除
      *
-     * @return R
+     * @param id id
+     * @return {@link R }<{@link Void }>
      */
     @DeleteMapping("{id}")
     @Roles({RoleType.SUPER_ADMIN})
@@ -95,7 +99,9 @@ public class UserController {
     /**
      * 根据id更新
      *
-     * @return R
+     * @param id      id
+     * @param request 用户角色请求
+     * @return {@link R }<{@link Void }>
      */
     @PatchMapping("{id}")
     @Preview
@@ -109,8 +115,9 @@ public class UserController {
     /**
      * 更新资料
      *
-     * @param id id
-     * @return R
+     * @param id      id
+     * @param request 更新用户信息请求
+     * @return {@link R }<{@link Void }>
      */
     @PatchMapping("/profile/{id}")
     @Preview
@@ -129,13 +136,13 @@ public class UserController {
      * 用户信息
      * {@link UserService#detail(Long, String)}
      *
-     * @return R
+     * @return {@link R }<{@link UserDetailDto }>
      */
     @GetMapping("/detail")
     @Operation(summary = "用户信息")
     public R<UserDetailDto> detail() {
         NumberWithFormat userId =
-            (NumberWithFormat) StpUtil.getExtra(SaTokenConfigure.JWT_USER_ID_KEY);
+                (NumberWithFormat) StpUtil.getExtra(SaTokenConfigure.JWT_USER_ID_KEY);
         String roleCode = (String) StpUtil.getExtra(SaTokenConfigure.JWT_CURRENT_ROLE_KEY);
         UserDetailDto detail = userService.detail(userId.longValue(), roleCode);
         return R.ok(detail);
@@ -146,7 +153,7 @@ public class UserController {
      * 根据用户名获取
      *
      * @param username 用户名
-     * @return R
+     * @return {@link R }<{@link Void }>
      */
     @GetMapping("/{username}")
     @Roles({RoleType.SUPER_ADMIN})
@@ -159,7 +166,8 @@ public class UserController {
     /**
      * 查询用户的profile
      *
-     * @return R
+     * @param userId 用户id
+     * @return {@link R }<{@link Void }>
      */
     @GetMapping("/profile/{userId}")
     @Operation(summary = "查询用户的profile")
@@ -170,8 +178,9 @@ public class UserController {
     /**
      * 添加角色
      *
-     * @param userId 用户id
-     * @return R
+     * @param userId  用户id
+     * @param request 用户角色请求
+     * @return {@link R }<{@link Object }>
      */
     @PostMapping("/roles/add/{userId}")
     @Preview
@@ -184,7 +193,9 @@ public class UserController {
     /**
      * 重置密码
      *
-     * @return R
+     * @param userId  用户id
+     * @param request 密码更新请求
+     * @return {@link R }<{@link Object }>
      */
     @PatchMapping("password/reset/{userId}")
     @Roles({RoleType.SUPER_ADMIN})

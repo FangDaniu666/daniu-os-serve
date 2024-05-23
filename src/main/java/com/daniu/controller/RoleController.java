@@ -54,13 +54,13 @@ public class RoleController {
     @GetMapping
     @Operation(summary = "获取所有角色")
     public R<List<RoleDto>> findAll(
-        @RequestParam(value = "enable", required = false) Boolean enable
+            @RequestParam(value = "enable", required = false) Boolean enable
     ) {
         List<RoleDto> roleDtoList = roleService.lambdaQuery().eq(ObjectUtil.isNotNull(enable), Role::getEnable, enable)
-            .list()
-            .stream()
-            .map(role -> role.convert(RoleDto.class))
-            .toList();
+                .list()
+                .stream()
+                .map(role -> role.convert(RoleDto.class))
+                .toList();
         return R.ok(roleDtoList);
     }
 
