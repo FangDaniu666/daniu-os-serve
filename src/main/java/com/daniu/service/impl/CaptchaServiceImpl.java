@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
  * 验证码，单机模式
  *
  * @author FangDaniu
+ * @since  2024/05/23
  */
 @Service
 public class CaptchaServiceImpl implements CaptchaService {

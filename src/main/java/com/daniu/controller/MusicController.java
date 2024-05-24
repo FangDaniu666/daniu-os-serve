@@ -12,11 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
-
-import static com.daniu.common.constant.Constants.ASSETS_PATH;
 
 /**
  * 音乐数据的控制器
@@ -51,7 +47,7 @@ public class MusicController {
     public Result insertOne(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) throw new BusinessException("请上传文件");
 
-        MusicDto music = musicService.insertOne(file);
+        MusicDto music = musicService.insertOrUpdateMusic(file);
         if (music.isInsert()) {
             return Result.success("文件上传成功", music);
         } else {
@@ -61,13 +57,7 @@ public class MusicController {
 
     @DeleteMapping("/deleteOne")
     public Result deleteOne(Integer id, String src, String pic) throws IOException {
-        String filePath = ASSETS_PATH + src;
-        String picPath = ASSETS_PATH + pic;
-
-        boolean removed = musicService.removeById(id);
-        if (!removed) throw new BusinessException("删除失败");
-        Files.deleteIfExists(Paths.get(filePath));
-        Files.deleteIfExists(Paths.get(picPath));
+        musicService.deleteMusicFile(id, src, pic);
         return Result.success("删除成功");
     }
 

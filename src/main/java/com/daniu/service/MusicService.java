@@ -15,5 +15,7 @@ public interface MusicService extends IService<Music>{
 
     int batchInsert(List<Music> list);
 
-    MusicDto insertOne(MultipartFile file) throws IOException;
+    MusicDto insertOrUpdateMusic(MultipartFile file) throws IOException;
+
+    void deleteMusicFile(Integer id, String src, String pic) throws IOException;
 }

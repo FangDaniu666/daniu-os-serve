@@ -3,7 +3,6 @@ package com.daniu.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.daniu.common.constant.Constants;
 import com.daniu.common.exception.BusinessException;
 import com.daniu.domain.dto.MusicDto;
 import com.daniu.domain.entity.Music;
@@ -13,11 +12,14 @@ import com.daniu.util.FileNameUtils;
 import com.daniu.util.FileUploader;
 import com.daniu.util.Mp3MetadataExtractor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+
+import static com.daniu.common.constant.Constants.ASSETS_PATH;
 
 @Service
 public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements MusicService {
@@ -33,8 +35,7 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public MusicDto insertOne(MultipartFile file) throws IOException {
+    public MusicDto insertOrUpdateMusic(MultipartFile file) throws IOException {
 
         // 获取上传文件的原始名称
         String fileName = file.getOriginalFilename();
@@ -42,38 +43,62 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
 
         String title = FileNameUtils.removeFileExtension(fileName);
         String src = "/song/" + fileName;
-        String musicFile = Constants.ASSETS_PATH + "/song/" + fileName;
-        String picFile = Constants.ASSETS_PATH + "/musiccovers/";
+        String musicFile = ASSETS_PATH + "/song/" + fileName;
+        String picFile = ASSETS_PATH + "/musiccovers/";
 
-        // 保存文件到本地
-        FileUploader.saveMultipartFileToLocalFile(file, Constants.ASSETS_PATH + "/song/", fileName);
+        Music music = new Music();
+        MusicDto musicDto;
+        try {
+            // 保存文件到本地
+            FileUploader.saveMultipartFileToLocalFile(file, ASSETS_PATH + "/song/", fileName);
 
-        String artist = Mp3MetadataExtractor.extractArtistFromMp3(musicFile);
-        String pic = "/musiccovers/" + Mp3MetadataExtractor.extractAndSaveCoverImage(musicFile, picFile, title);
+            String artist = Mp3MetadataExtractor.extractArtistFromMp3(musicFile);
+            String pic = "/musiccovers/" + Mp3MetadataExtractor.extractAndSaveCoverImage(musicFile, picFile, title);
 
-        Music music = Music.builder()
-                .title(title)
-                .artist(artist)
-                .src(src)
-                .pic(pic).build();
+            music = Music.builder()
+                    .title(title)
+                    .artist(artist)
+                    .src(src)
+                    .pic(pic).build();
 
-        QueryWrapper<Music> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("src", src);
+            QueryWrapper<Music> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("src", src);
 
-        Music existingMusic = baseMapper.selectOne(queryWrapper);
+            Music existingMusic = baseMapper.selectOne(queryWrapper);
 
-        boolean isInsert = ObjectUtil.isEmpty(existingMusic);
-        if (isInsert) {
-            int insertResult = baseMapper.insert(music);
-            if (insertResult == 0) throw new BusinessException("文件上传失败");
-        } else {
-            music.setId(existingMusic.getId());
-            int updateResult = baseMapper.updateById(music);
-            if (updateResult == 0) throw new BusinessException("文件更新失败");
+            boolean isInsert = ObjectUtil.isEmpty(existingMusic);
+            if (isInsert) {
+                int insertResult = baseMapper.insert(music);
+                if (insertResult == 0) {
+                    throw new BusinessException("文件上传失败");
+                }
+            } else {
+                music.setId(existingMusic.getId());
+                int updateResult = baseMapper.updateById(music);
+                if (updateResult == 0) {
+                    throw new BusinessException("文件更新失败");
+                }
+            }
+            musicDto = music.convert(MusicDto.class);
+            musicDto.setInsert(isInsert);
+        } catch (Exception exception) {
+            // 删除已保存的文件
+            this.deleteMusicFile(music.getId(), music.getSrc(), music.getPic());
+            throw exception;
         }
-        MusicDto musicDto = music.convert(MusicDto.class);
-        musicDto.setInsert(isInsert);
+
         return musicDto;
+    }
+
+    @Override
+    public void deleteMusicFile(Integer id, String src, String pic) throws IOException {
+        String filePath = ASSETS_PATH + src;
+        String picPath = ASSETS_PATH + pic;
+
+        boolean removed = removeById(id);
+        Files.deleteIfExists(Paths.get(filePath));
+        Files.deleteIfExists(Paths.get(picPath));
+        if (!removed) throw new BusinessException("删除失败");
     }
 
 }
