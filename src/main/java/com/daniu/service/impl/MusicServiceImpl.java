@@ -48,6 +48,8 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
 
         Music music = new Music();
         MusicDto musicDto;
+        boolean isInsert = false;
+
         try {
             // 保存文件到本地
             FileUploader.saveMultipartFileToLocalFile(file, ASSETS_PATH + "/song/", fileName);
@@ -66,7 +68,7 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
 
             Music existingMusic = baseMapper.selectOne(queryWrapper);
 
-            boolean isInsert = ObjectUtil.isEmpty(existingMusic);
+            isInsert = ObjectUtil.isEmpty(existingMusic);
             if (isInsert) {
                 int insertResult = baseMapper.insert(music);
                 if (insertResult == 0) {
@@ -83,7 +85,9 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
             musicDto.setInsert(isInsert);
         } catch (Exception exception) {
             // 删除已保存的文件
-            this.deleteMusicFile(music.getId(), music.getSrc(), music.getPic());
+            if (isInsert) {
+                this.deleteMusicFile(music.getId(), music.getSrc(), music.getPic());
+            }
             throw exception;
         }
 
