@@ -1,7 +1,7 @@
 package com.daniu.controller;
 
 import com.daniu.common.exception.BusinessException;
-import com.daniu.common.response.Result;
+import com.daniu.common.response.R;
 import com.daniu.domain.dto.MusicDto;
 import com.daniu.domain.entity.Music;
 import com.daniu.service.MusicService;
@@ -32,38 +32,38 @@ public class MusicController {
 
     @GetMapping("selectOne")
     @Operation(summary = "根据id查询")
-    public Result selectOne(Integer id) {
+    public R<Music> selectOne(Integer id) {
         Music music = musicService.getById(id);
         if (music == null) throw new BusinessException("没有数据");
-        return Result.success("查询成功", music);
+        return R.success("查询成功", music);
     }
 
     @GetMapping("selectAll")
     @Operation(summary = "查询全部")
-    public Result selectAll() {
+    public R<List<Music>> selectAll() {
         List<Music> musicList = musicService.list();
         if (musicList.isEmpty()) throw new BusinessException("没有数据");
-        return Result.success("查询成功", musicList);
+        return R.success("查询成功", musicList);
     }
 
     @PostMapping("/insertOne")
     @Operation(summary = "上传音乐文件")
-    public Result insertOne(@RequestParam("file") MultipartFile file) throws IOException {
+    public R<MusicDto> insertOne(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) throw new BusinessException("请上传文件");
 
         MusicDto music = musicService.insertOrUpdateMusic(file);
         if (music.isInsert()) {
-            return Result.success("文件上传成功", music);
+            return R.success("文件上传成功", music);
         } else {
-            return Result.success("文件更新成功", music);
+            return R.success("文件更新成功", music);
         }
     }
 
     @DeleteMapping("/deleteOne")
     @Operation(summary = "删除音乐文件")
-    public Result deleteOne(Integer id, String src, String pic) throws IOException {
+    public R<String> deleteOne(Integer id, String src, String pic) throws IOException {
         musicService.deleteMusicFile(id, src, pic);
-        return Result.success("删除成功");
+        return R.ok("删除成功");
     }
 
 }

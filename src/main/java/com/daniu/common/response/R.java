@@ -55,6 +55,34 @@ public class R<T> {
     }
 
     /**
+     * 成功地响应码，附带消息
+     *
+     * @param message 消息
+     * @return {@link R }<{@link T }>
+     */
+    public static <T> R<T> ok(String message) {
+        R<T> r = new R<>();
+        r.setCode(ErrorCode.OK.getCode());
+        r.setMessage(message);
+        return r;
+    }
+
+    /**
+     * 成功
+     *
+     * @param message 消息
+     * @param data    数据
+     * @return {@link R }<{@link T }>
+     */
+    public static <T> R<T> success(String message, T data) {
+        R<T> r = new R<>();
+        r.setData(data);
+        r.setCode(ErrorCode.OK.getCode());
+        r.setMessage(message);
+        return r;
+    }
+
+    /**
      * 构建业务异常的响应
      *
      * @param exception 业务异常
