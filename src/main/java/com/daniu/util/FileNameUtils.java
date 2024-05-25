@@ -12,7 +12,7 @@ import lombok.experimental.UtilityClass;
 public class FileNameUtils {
 
     public static String removeFileExtension(String fileName) {
-        // 查找最后一个点的索引位置
+        // 查询最后一个点的索引位置
         int extensionIndex = fileName.lastIndexOf('.');
         if (extensionIndex == -1) {
             // 如果找不到点，则返回原始文件名

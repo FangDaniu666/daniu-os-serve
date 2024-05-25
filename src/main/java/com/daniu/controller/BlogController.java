@@ -6,6 +6,7 @@ import com.daniu.common.response.Result;
 import com.daniu.service.MapDataService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ public class BlogController {
      * @throws IOException IOException
      */
     @GetMapping("selectOne")
+    @Operation(summary = "根据id查询")
     public Result selectOne(String name) throws IOException {
         // 构造文件完整路径
         String filePath = Constants.DOC_PATH + name;
@@ -59,6 +61,7 @@ public class BlogController {
      * @apiNote 上传单个markdown文件到服务器，并处理该文件。
      */
     @PostMapping("/insertOne")
+    @Operation(summary = "上传markdown文件")
     public Result insertOne(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) throw new BusinessException("请上传文件");
         mapDataService.insertOrUpdateMapData(file);
@@ -75,6 +78,7 @@ public class BlogController {
      * @throws IOException IOException
      */
     @DeleteMapping("/deleteOne")
+    @Operation(summary = "删除markdown文件")
     public Result deleteOne(Integer id, String name) throws IOException {
         String filePath = Constants.DOC_PATH + name;
 

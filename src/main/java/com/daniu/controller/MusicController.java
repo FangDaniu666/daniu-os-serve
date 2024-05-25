@@ -5,6 +5,7 @@ import com.daniu.common.response.Result;
 import com.daniu.domain.dto.MusicDto;
 import com.daniu.domain.entity.Music;
 import com.daniu.service.MusicService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class MusicController {
     private final MusicService musicService;
 
     @GetMapping("selectOne")
+    @Operation(summary = "根据id查询")
     public Result selectOne(Integer id) {
         Music music = musicService.getById(id);
         if (music == null) throw new BusinessException("没有数据");
@@ -37,6 +39,7 @@ public class MusicController {
     }
 
     @GetMapping("selectAll")
+    @Operation(summary = "查询全部")
     public Result selectAll() {
         List<Music> musicList = musicService.list();
         if (musicList.isEmpty()) throw new BusinessException("没有数据");
@@ -44,6 +47,7 @@ public class MusicController {
     }
 
     @PostMapping("/insertOne")
+    @Operation(summary = "上传音乐文件")
     public Result insertOne(@RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) throw new BusinessException("请上传文件");
 
@@ -56,6 +60,7 @@ public class MusicController {
     }
 
     @DeleteMapping("/deleteOne")
+    @Operation(summary = "删除音乐文件")
     public Result deleteOne(Integer id, String src, String pic) throws IOException {
         musicService.deleteMusicFile(id, src, pic);
         return Result.success("删除成功");

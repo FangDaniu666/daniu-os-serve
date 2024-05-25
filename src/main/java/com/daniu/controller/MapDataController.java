@@ -3,6 +3,7 @@ package com.daniu.controller;
 import com.daniu.common.response.Result;
 import com.daniu.domain.entity.MapData;
 import com.daniu.service.MapDataService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class MapDataController {
      * @return map数据
      */
     @GetMapping("selectOne")
+    @Operation(summary = "根据id查询")
     public Result selectOne(Integer id) {
         Optional<MapData> optById = mapDataService.getOptById(id);
         return optById.map(mapData -> Result.success("查询成功", mapData))
@@ -45,6 +47,7 @@ public class MapDataController {
      * @return {@link Result }
      */
     @GetMapping("selectAll")
+    @Operation(summary = "查询全部MapData数据")
     public Result selectAll() {
         // 调用服务层方法，获取所有MapData数据
         List<MapData> list = mapDataService.list();
