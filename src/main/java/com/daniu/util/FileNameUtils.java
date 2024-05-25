@@ -2,6 +2,12 @@ package com.daniu.util;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * 文件名工具类
+ *
+ * @author FangDaniu
+ * @since 2024/05/25
+ */
 @UtilityClass
 public class FileNameUtils {
 

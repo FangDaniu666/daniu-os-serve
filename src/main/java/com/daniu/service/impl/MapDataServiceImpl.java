@@ -19,6 +19,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 地图数据服务impl
+ *
+ * @author FangDaniu
+ * @since 2024/05/25
+ */
 @Service
 public class MapDataServiceImpl extends ServiceImpl<MapDataMapper, MapData> implements MapDataService {
 

@@ -9,7 +9,7 @@ import com.daniu.domain.entity.Music;
 import com.daniu.mapper.MusicMapper;
 import com.daniu.service.MusicService;
 import com.daniu.util.FileNameUtils;
-import com.daniu.util.FileUploader;
+import com.daniu.util.FileToLocalSaver;
 import com.daniu.util.Mp3MetadataExtractor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +36,6 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
 
     @Override
     public MusicDto insertOrUpdateMusic(MultipartFile file) throws IOException {
-
         // 获取上传文件的原始名称
         String fileName = file.getOriginalFilename();
         if (fileName == null) throw new BusinessException("文件名不能为空");
@@ -52,7 +51,7 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
 
         try {
             // 保存文件到本地
-            FileUploader.saveMultipartFileToLocalFile(file, ASSETS_PATH + "/song/", fileName);
+            FileToLocalSaver.saveMultipartFileToLocalFile(file, ASSETS_PATH + "/song/", fileName);
 
             String artist = Mp3MetadataExtractor.extractArtistFromMp3(musicFile);
             String pic = "/musiccovers/" + Mp3MetadataExtractor.extractAndSaveCoverImage(musicFile, picFile, title);
@@ -70,16 +69,10 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
 
             isInsert = ObjectUtil.isEmpty(existingMusic);
             if (isInsert) {
-                int insertResult = baseMapper.insert(music);
-                if (insertResult == 0) {
-                    throw new BusinessException("文件上传失败");
-                }
+                baseMapper.insert(music);
             } else {
                 music.setId(existingMusic.getId());
-                int updateResult = baseMapper.updateById(music);
-                if (updateResult == 0) {
-                    throw new BusinessException("文件更新失败");
-                }
+                baseMapper.updateById(music);
             }
             musicDto = music.convert(MusicDto.class);
             musicDto.setInsert(isInsert);
@@ -87,8 +80,10 @@ public class MusicServiceImpl extends ServiceImpl<MusicMapper, Music> implements
             // 删除已保存的文件
             if (isInsert) {
                 this.deleteMusicFile(music.getId(), music.getSrc(), music.getPic());
+                throw new BusinessException("文件上传失败");
+            } else {
+                throw new BusinessException("文件更新失败");
             }
-            throw exception;
         }
 
         return musicDto;

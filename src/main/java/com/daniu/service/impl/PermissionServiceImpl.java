@@ -1,21 +1,23 @@
 package com.daniu.service.impl;
 
-import com.daniu.domain.dto.PermissionDto;
-import com.daniu.domain.entity.Permission;
-import com.daniu.mapper.PermissionMapper;
-import com.daniu.domain.request.CreatePermissionRequest;
-import com.daniu.service.PermissionService;
-import com.daniu.util.PermissionUtil;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import java.util.List;
+import com.daniu.domain.dto.PermissionDto;
+import com.daniu.domain.entity.Permission;
+import com.daniu.domain.request.CreatePermissionRequest;
+import com.daniu.mapper.PermissionMapper;
+import com.daniu.service.PermissionService;
+import com.daniu.util.PermissionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 权限服务类的实现类，主要负责权限相关的处理
  *
  * @author FangDaniu
+ * @since 2024/05/25
  */
 @Service
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission>

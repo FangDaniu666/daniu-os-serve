@@ -1,17 +1,19 @@
 package com.daniu.util;
 
-import com.daniu.domain.entity.Permission;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
-import java.util.List;
+import com.daniu.domain.entity.Permission;
 import lombok.experimental.UtilityClass;
+
+import java.util.List;
 
 /**
  * 权限相关工具类
  *
  * @author FangDaniu
+ * @since 2024/05/25
  */
 @UtilityClass
 public class PermissionUtil {

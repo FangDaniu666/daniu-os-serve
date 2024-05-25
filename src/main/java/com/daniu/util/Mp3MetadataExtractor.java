@@ -12,6 +12,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * mp3元数据提取类
+ *
+ * @author FangDaniu
+ * @since 2024/05/25
+ */
 @UtilityClass
 @Slf4j
 public class Mp3MetadataExtractor {
@@ -21,8 +27,7 @@ public class Mp3MetadataExtractor {
 
         if (mp3.hasId3v2Tag()) {
             ID3v2 id3v2Tag = mp3.getId3v2Tag();
-            String artist = id3v2Tag.getArtist();
-            return artist;
+            return id3v2Tag.getArtist();
         } else {
             return "Unknown";
         }

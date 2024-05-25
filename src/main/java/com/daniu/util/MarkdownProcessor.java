@@ -15,6 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * markdown文件处理类
+ *
+ * @author FangDaniu
+ * @since 2024/05/25
+ */
 @UtilityClass
 @Slf4j
 public class MarkdownProcessor {
@@ -22,7 +28,7 @@ public class MarkdownProcessor {
     public static Map<String, Object> processMarkdownFile(String filePath, String copyTargetDir) {
         File file = new File(filePath);
         if (!file.exists() || !file.isFile()) {
-            log.error("文件未找到或不是有效的文件: " + filePath);
+            log.error("文件未找到或不是有效的文件: {}", filePath);
             return Map.of("name", " ", "path", " ", "lastedittime", " ");
         }
         String header = "desktop"; // 如果需要，可以在此处提供标题字符串
@@ -42,7 +48,7 @@ public class MarkdownProcessor {
             boolean titleFound = false;
             boolean abstractFound = false;
             for (String line : lines) {
-                if (titleFound && !abstractFound) {
+                if (titleFound) {
                     line = line.trim();
                     if (line.isEmpty() || line.startsWith("#") || line.startsWith("!") || line.startsWith("[") || line.startsWith("]") || line.startsWith("(") || line.startsWith(")") || line.startsWith("-") || line.startsWith(".") || line.startsWith(":")) {
                         continue;
@@ -62,7 +68,7 @@ public class MarkdownProcessor {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("读取文件内容时出错: {}", e.getMessage());
         }
         fileInfo.put("title", title);
         fileInfo.put("abstract", abstract_);
@@ -76,7 +82,7 @@ public class MarkdownProcessor {
             BasicFileAttributes attrs = Files.readAttributes(path, BasicFileAttributes.class);
             return attrs.lastModifiedTime().toMillis();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("获取文件修改时间时出错: {}", e.getMessage());
             return 0;
         }
     }
@@ -100,34 +106,8 @@ public class MarkdownProcessor {
             writer.write("{\"data\":\"" + content + "\"}");
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("保存文件内容时出错: {}", e.getMessage());
         }
     }
 
-    /*private static void saveMapJson(Map<String, Object> fileInfo, String copyTargetDir) {
-        try {
-            FileWriter writer = new FileWriter(copyTargetDir + File.separator + "map.json");
-            writer.write(convertToJson(fileInfo));
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    /*private static String convertToJson(Map<String, Object> fileInfo) {
-        StringBuilder jsonBuilder = new StringBuilder();
-        jsonBuilder.append("{");
-        for (Map.Entry<String, Object> pair : fileInfo.entrySet()) {
-            jsonBuilder.append("\"").append(pair.getKey()).append("\":");
-            Object value = pair.getValue();
-            if (value instanceof String) {
-                jsonBuilder.append("\"").append(value).append("\",");
-            } else if (value instanceof Long) {
-                jsonBuilder.append(value).append(",");
-            }
-        }
-        jsonBuilder.deleteCharAt(jsonBuilder.length() - 1);
-        jsonBuilder.append("}");
-        return jsonBuilder.toString();
-    }*/
 }
