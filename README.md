@@ -28,7 +28,7 @@ daniu-os的后端实现，基于 Spring Boot3 。
 
 ## 使用 Dockerfile 部署项目
 
-本文档将指导您如何使用提供的 Dockerfile 来部署项目。项目根目录包含用于构建 Docker 镜像的 [Dockerfile](https://github.com/daniu-os/daniu-os-serve/Dockerfile)。
+本文档将指导您如何使用提供的 Dockerfile 来部署项目。项目根目录包含用于构建 Docker 镜像的 [Dockerfile](https://github.com/FangDaniu666/daniu-os-serve/blob/master/Dockerfile)。
 
 ### 构建 Docker 镜像
 
