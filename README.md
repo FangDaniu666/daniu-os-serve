@@ -1,11 +1,11 @@
 # daniu-os-serve
 
-daniu-os的后端实现，基于 Spring Boot 框架。
+daniu-os的后端实现，基于 Spring Boot3 。
 
 ## 技术栈
 
 - **Sa-token**：国产轻量级权限验证框架，官方文档请查阅 [sa-token.cc](https://sa-token.cc/index.html)。
-   - **JWT 支持**：通过 `sa-token-jwt` 进行 JWT 令牌管理，增强系统安全性。
+   - **JWT 支持**：通过 `sa-token-jwt` 进行 JWT 令牌管理。
 
 - **文档生成工具**：结合 Knife4j，可以方便地生成 API 文档。
 
@@ -20,6 +20,11 @@ daniu-os的后端实现，基于 Spring Boot 框架。
 - **参数校验**：使用 Hibernate Validator 进行参数校验。
 
 - **MP3 操作**：使用 mp3agic 库进行 MP3 文件的操作。
+
+## 运行环境
+
+- Java 17 或更高版本
+- MySQL 8.0 
 
 ## 使用 Dockerfile 部署项目
 
