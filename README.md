@@ -49,3 +49,8 @@ docker run -d -p 8085:8085 --name daniu-os-serve daniu-os-serve:latest
 ```
 
 部署完成后，可以通过 `http://ip:8085/api` 来调用 API。
+
+### 其他部分
+前端地址：[daniu-os](https://github.com/FangDaniu666/daniu-os)
+后台管理地址：[daniu-os-admin](https://github.com/FangDaniu666/daniu-os-admin)
+
